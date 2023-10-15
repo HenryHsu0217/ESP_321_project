@@ -1,17 +1,42 @@
 import gym
 import time
+import torch
+from NN import NeuralNetwork
+import torch.distributions as distributions
 if __name__ == '__main__':
     env = gym.make('InvertedDoublePendulum-v4',render_mode="human")
-    num_steps = 1500
-
-    obs = env.reset()
-    for step in range(num_steps):
-        # take random action
-        action = env.action_space.sample()
-        # apply the action
-        obs,a,b,c,d= env.step(action)
-        print(obs)
-        # Render the env
-        env.render()
-        time.sleep(0.001)
+    episodes=2000
+    gamma = 0.6
+    policy=NeuralNetwork()
+    optim=torch.optim.Adam(policy.parameters(),lr=0.1)
+    for episode in range(episodes):
+        obs, _, = env.reset()
+        obs = obs[:8]
+        done=False
+        memory =[]
+        while not done:
+            mean, std_dev = policy(torch.tensor(obs).float())
+            dist = distributions.Normal(mean, std_dev)
+            action = dist.sample()
+            log_prob = dist.log_prob(action)
+            a = action.detach().numpy()
+            obs, reward, done,_,_, = env.step(a)
+            obs = obs[:8]
+            memory.append((obs, a, log_prob, reward, obs, done))
+            env.render()
+            time.sleep(0.001)
+        returns = []
+        G = 0
+        for _,_, _, reward, _, _ in reversed(memory):
+            G = reward + gamma * G
+            returns.append(G)
+        returns.reverse()
+        returns = torch.tensor(returns)
+        normalized_returns = (returns - returns.mean()) / (returns.std() + 1e-8)
+        log_probs = [item[2] for item in memory]
+        loss = -torch.sum(torch.stack(log_probs) * normalized_returns)
+        optim.zero_grad()
+        loss.backward()
+        optim.step()
+        print(f"Episode {episode}, Loss: {loss.item()}")
     env.close()
