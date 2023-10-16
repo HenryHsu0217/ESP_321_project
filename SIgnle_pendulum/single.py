@@ -1,17 +1,17 @@
 import gym
-import time
-import torch
 from NN import NeuralNetwork
+import torch
 import torch.distributions as distributions
+import time
 if __name__ == '__main__':
-    env = gym.make('InvertedDoublePendulum-v4',render_mode="human")
-    episodes=10000
+    env = gym.make('InvertedPendulum-v4',render_mode="human")
+    episodes=100000
     gamma = 0.9
     policy=NeuralNetwork()
     optim=torch.optim.Adam(policy.parameters(),lr=0.001)
     for episode in range(episodes):
         obs, _, = env.reset()
-        obs = obs[:8]
+        obs = obs[:4]
         done=False
         memory =[]
         while not done:
@@ -21,7 +21,7 @@ if __name__ == '__main__':
             log_prob = dist.log_prob(action)
             a = action.detach().numpy()
             obs, reward, done,_,_, = env.step(a)
-            obs = obs[:8]
+            obs = obs[:4]
             memory.append((obs, a, log_prob, reward, obs, done))
             env.render()
         returns = []
