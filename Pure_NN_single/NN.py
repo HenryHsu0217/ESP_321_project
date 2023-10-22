@@ -13,9 +13,9 @@ class NeuralNetwork(torch.nn.Module):
             torch.nn.Linear(512, 256),
             torch.nn.ReLU(),
             torch.nn.Linear(256, 128),
-            torch.nn.ReLU(),
+            torch.nn.Tanh(),
             torch.nn.Linear(128, 1)
         )
     def forward(self, x):
-        out = self.mean_net(x)
+        out = self.net(x)
         return out
