@@ -4,7 +4,7 @@ import gym
 if __name__ == '__main__':
     """Testing with the gym enviroment"""
     model = NeuralNetwork()
-    model.load_state_dict(torch.load('./Trained_models/9644.pth'))
+    model.load_state_dict(torch.load('./Trained_models/10000.pth'))
     model.eval()
     env = gym.make("InvertedPendulum-v4", render_mode="human")
     episodes=10

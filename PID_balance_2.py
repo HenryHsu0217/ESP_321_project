@@ -47,5 +47,5 @@ for _ in  tqdm (range (10000), desc="Loading..."):
         max = current
 env.close()
 print(len(data_to_save))
-np.savez('./Pure_NN_single/Datas/arrays_data.npz', *data_to_save)
+np.savez('./Pure_NN_single/Datas/data_with_PID_V2.npz', *data_to_save)
 print(max)

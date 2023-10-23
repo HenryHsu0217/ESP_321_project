@@ -18,7 +18,7 @@ class CustomDataset(Dataset):
 if __name__ == '__main__':
     #############################################################################################
     """Traing of the network"""
-    dataset = CustomDataset('./Datas/data_9644.npz')
+    dataset = CustomDataset('./Datas/data_with_PID_V2.npz')
     data_loader = DataLoader(dataset, batch_size=32, shuffle=True)
     model = NeuralNetwork()
     criterion = torch.nn.MSELoss()

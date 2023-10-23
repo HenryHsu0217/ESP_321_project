@@ -31,7 +31,7 @@ for _ in  tqdm (range (10000), desc="Loading..."):
         #print("________________________________________________________________________________________________________")
     # angle = np.arctan2(observation[1],observation[3])
     verror = 0-observation[2]
-    setpoint = 0.0 * verror + 0.00 * (verror-prevverror)
+    setpoint = 0.0 * verror + 0.00 * (verror-preverror)
     angle = observation[1]
     error = setpoint - angle
     error = angle
