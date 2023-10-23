@@ -6,11 +6,12 @@ action = 0
 Kp =4.3
 Ki = 0.15
 Kd = 0.1
-# Kp =2
-# Ki = 0.0
-# Kd = 0
-errorsum=0
-preverror = 0
+k1 = 4.3
+k2 = 0.1
+k3 = 0.1
+k4 = 0.2
+
+
 
 max = 0
 current = 0
@@ -30,15 +31,15 @@ for _ in  tqdm (range (10000), desc="Loading..."):
         preverror = 0
         #print("________________________________________________________________________________________________________")
     # angle = np.arctan2(observation[1],observation[3])
-    verror = 0-observation[2]
-    setpoint = 0.0 * verror + 0.00 * (verror-prevverror)
     angle = observation[1]
-    error = setpoint - angle
-    error = angle
-    errorsum += error
-    action = Kp * error + Ki * errorsum + Kd * (error-preverror)
+    angularvel = observation[3]
+    position = observation[0]
+    velocity = observation[2]
+
+
+    action = k1 * angle + k2 * angularvel + k3 * position + k4 * velocity
     action = np.clip(action, -3, 3)
-    preverror = error
+
     if angle<0.1:
         data=np.append(observation,np.array(action))
         data_to_save.append(data)
@@ -46,5 +47,5 @@ for _ in  tqdm (range (10000), desc="Loading..."):
         max = current
 env.close()
 print(len(data_to_save))
-np.savez('./Pure_NN_single/Datas/arrays_with_speed_limitation_data.npz', *data_to_save)
+np.savez('./Pure_NN_single/Datas/arrays_data.npz', *data_to_save)
 print(max)
