@@ -8,7 +8,6 @@ Ki = 0.15
 Kd = 0.1
 errorsum=0
 preverror = 0
-
 max = 0
 current = 0
 observation, info = env.reset(seed=42)
@@ -33,12 +32,12 @@ for _ in  tqdm (range (10000), desc="Loading..."):
     action = Kp * error + Ki * errorsum + Kd * (error-preverror)
     action = np.clip(action, -1, 1)
     preverror = error
-    if angle<0.1:
+    if angle<0.1 and  abs(observation[2]<0.5) and abs(observation[0]<1):
         data=np.append(observation,np.array(action))
         data_to_save.append(data)
     if current>max:
         max = current
 env.close()
 print(len(data_to_save))
-np.savez('./Pure_NN_single/Datas/arrays_data.npz', *data_to_save)
+np.savez('./Pure_NN_single/Datas/arrays_with_speed_limitation_data.npz', *data_to_save)
 print(max)
