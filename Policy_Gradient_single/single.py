@@ -6,9 +6,9 @@ import time
 if __name__ == '__main__':
     env = gym.make('InvertedPendulum-v4',render_mode="human")
     episodes=100000
-    gamma = 0.8
+    gamma = 0.9
     policy=NeuralNetwork()
-    optim=torch.optim.Adam(policy.parameters(),lr=0.00000001)
+    optim=torch.optim.Adam(policy.parameters(),lr=0.0001)
     for episode in range(episodes):
         env.steps=0
         obs, _, = env.reset()
@@ -41,6 +41,6 @@ if __name__ == '__main__':
         optim.zero_grad()
         loss.backward()
         optim.step()
-        #print(f"Episode {episode}, Loss: {loss.item()}")
+        print(f"Episode {episode}, Loss: {loss.item()}")
     env.close()
     torch.save(policy, '/Users/henryhsu/ESP_321_project/ANN/Saved_model')
