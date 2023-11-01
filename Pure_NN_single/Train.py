@@ -18,7 +18,7 @@ class CustomDataset(Dataset):
 if __name__ == '__main__':
     #############################################################################################
     """Traing of the network"""
-    dataset = CustomDataset('./Datas/data_with_PID_V2.npz')
+    dataset = CustomDataset('./Datas/data_with_random_force.npz')
     data_loader = DataLoader(dataset, batch_size=32, shuffle=True)
     model = NeuralNetwork()
     criterion = torch.nn.MSELoss()
@@ -32,4 +32,4 @@ if __name__ == '__main__':
             loss.backward()
             optimizer.step()
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.20f}')
-    torch.save(model.state_dict(), f'./Trained_models/{dataset.__len__()}.pth')
+    torch.save(model.state_dict(), f'./Trained_models/_external_force_{dataset.__len__()}.pth')

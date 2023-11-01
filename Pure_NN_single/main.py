@@ -15,12 +15,11 @@ def get_user_input(force_input,stop_signal):
 if __name__ == '__main__':
     """Testing with the gym enviroment"""
     model = NeuralNetwork()
-    model.load_state_dict(torch.load('./Trained_models/10000.pth'))
+    model.load_state_dict(torch.load('./Trained_models/external_random_force.pth'))
     model.eval()
     env = gym.make("InvertedPendulum-v4", render_mode="human")
     episodes=10
     force_input = []
-    
     for episode in range(episodes):
         termination=False
         observation,_=env.reset(seed=42)
